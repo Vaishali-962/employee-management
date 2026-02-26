@@ -1,13 +1,14 @@
 package com.GenNext.employee_management.service;
 
-import com.GenNext.employee_management.dto.EmployeeResponseDto;
+import com.GenNext.employee_management.dto.requestDto.EmployeeRequestDto;
+import com.GenNext.employee_management.dto.responseDto.EmployeeResponseDto;
 import com.GenNext.employee_management.model.Employee;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface EmployeeService {
-    EmployeeResponseDto createEmployee(Employee employee);
+    EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto);
 
     List<EmployeeResponseDto> getAllEmployees();
 

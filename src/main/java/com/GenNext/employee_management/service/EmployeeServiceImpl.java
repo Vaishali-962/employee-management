@@ -1,6 +1,7 @@
 package com.GenNext.employee_management.service;
 
-import com.GenNext.employee_management.dto.EmployeeResponseDto;
+import com.GenNext.employee_management.dto.requestDto.EmployeeRequestDto;
+import com.GenNext.employee_management.dto.responseDto.EmployeeResponseDto;
 import com.GenNext.employee_management.model.Employee;
 import com.GenNext.employee_management.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,15 +11,14 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeResponseDto createEmployee(Employee employee){
-        Employee savedEmployee = employeeRepository.save(employee);
+    public EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto){
+        Employee savedEmployee = employeeRepository.save(toEmployeeEntity(employeeRequestDto));
         return toDto(savedEmployee);
     }
 
@@ -57,9 +57,9 @@ public class EmployeeServiceImpl implements EmployeeService{
         employeeRepository.deleteById(empId);
     }
 
-    /* Employee Response DTO (from backend to client */
+    /* Employee Response DTO (from backend to client) */
 
-    public EmployeeResponseDto toDto(Employee employee){
+    EmployeeResponseDto toDto(Employee employee){
 
         return EmployeeResponseDto
                 .builder()
@@ -70,5 +70,19 @@ public class EmployeeServiceImpl implements EmployeeService{
                 .mobileNumber(employee.getMobileNumber())
                 .joinOn(employee.getJoiningDate())
                 .build();
+    }
+
+    /* Employee Request DTO (From Client to Backend) */
+    Employee toEmployeeEntity(EmployeeRequestDto employeeRequestDto){
+        Employee employee = new Employee();
+        employee.setName(employeeRequestDto.getName());
+        employee.setRole(employeeRequestDto.getDesignation());
+        employee.setDepartment(employeeRequestDto.getDepartment());
+        employee.setSalary(new BigDecimal("0.00"));
+        employee.setMobileNumber(employeeRequestDto.getMobileNumber());
+        employee.setJoiningDate(employeeRequestDto.getJoinOn());
+        return employee;
+
+
     }
 }

@@ -14,12 +14,12 @@ public class EmployeeRequestDto {
     private String name;
 
 
-    @NotBlank(message = "Designation is Required!")
+    @NotNull(message = "Designation is Required!")
     @Enumerated(EnumType.STRING)
     private Role designation;
 
 
-    @NotBlank(message = "Department is Required!")
+    @NotNull(message = "Department is Required!")
     @Enumerated(EnumType.STRING)
     private Department department;
 

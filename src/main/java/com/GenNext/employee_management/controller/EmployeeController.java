@@ -1,8 +1,10 @@
 package com.GenNext.employee_management.controller;
 
-import com.GenNext.employee_management.dto.EmployeeResponseDto;
+import com.GenNext.employee_management.dto.requestDto.EmployeeRequestDto;
+import com.GenNext.employee_management.dto.responseDto.EmployeeResponseDto;
 import com.GenNext.employee_management.model.Employee;
 import com.GenNext.employee_management.service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +21,8 @@ public class EmployeeController {
 
     /* CREATE DATA ON SERVER */
     @PostMapping
-    public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody Employee employee){
-       EmployeeResponseDto savedEmployee = employeeService.createEmployee(employee);
+    public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody @Valid EmployeeRequestDto employeeRequestDto){
+       EmployeeResponseDto savedEmployee = employeeService.createEmployee(employeeRequestDto);
        return ResponseEntity.status(HttpStatus.CREATED).body(savedEmployee);
     }
 

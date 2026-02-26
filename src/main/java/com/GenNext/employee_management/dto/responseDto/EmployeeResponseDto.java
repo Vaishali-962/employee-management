@@ -1,4 +1,4 @@
-package com.GenNext.employee_management.dto;
+package com.GenNext.employee_management.dto.responseDto;
 
 
 import com.GenNext.employee_management.enums.Department;
