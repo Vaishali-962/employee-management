@@ -1,19 +1,22 @@
 package com.GenNext.employee_management.service;
 
+import com.GenNext.employee_management.dto.requestDto.EmployeeRequestDto;
+import com.GenNext.employee_management.dto.responseDto.EmployeeResponseDto;
 import com.GenNext.employee_management.model.Employee;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface EmployeeService {
-    Employee createEmployee(Employee employee);
+    EmployeeResponseDto createEmployee(EmployeeRequestDto employeeRequestDto);
 
-    List<Employee> getAllEmployees();
-    Employee getEmployeeById(Long Id);
+    List<EmployeeResponseDto> getAllEmployees();
 
-    Employee updateEmployeeById(Employee empId, Long id);
+    EmployeeResponseDto getEmployeeById(Long Id);
 
-    Employee updateEmployeeSalary(Long empId, BigDecimal salary);
+    EmployeeResponseDto updateEmployeeById(EmployeeRequestDto employeeRequestDto, Long id);
+
+    EmployeeResponseDto updateEmployeeSalary(Long empId, BigDecimal salary);
 
     void deleteEmployeeById(Long empId);
 }
