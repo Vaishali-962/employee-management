@@ -14,7 +14,7 @@ public interface EmployeeService {
 
     EmployeeResponseDto getEmployeeById(Long Id);
 
-    EmployeeResponseDto updateEmployeeById(Employee empId, Long id);
+    EmployeeResponseDto updateEmployeeById(EmployeeRequestDto employeeRequestDto, Long id);
 
     EmployeeResponseDto updateEmployeeSalary(Long empId, BigDecimal salary);
 

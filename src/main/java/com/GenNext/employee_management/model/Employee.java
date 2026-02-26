@@ -33,7 +33,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Department department;
 
-    @Column(name="salary", nullable=false)
+    @Column(name="salary")
     private BigDecimal salary;
 
     @Column(name="mobile_number")
