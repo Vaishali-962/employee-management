@@ -47,4 +47,8 @@ public class EmployeeServiceImpl implements EmployeeService{
             throw new RuntimeException("Why he cut's night of our house only");
         }
     }
+
+    public void deleteEmployeeById(Long empId){
+        employeeRepository.deleteById(empId);
+    }
 }
