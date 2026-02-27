@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface EmployeeMapper {
     @Mapping(target = "designation", source = "role")
@@ -17,4 +19,8 @@ public interface EmployeeMapper {
     @Mapping(target = "role", source = "designation")
     @Mapping(target = "joiningDate", source = "joinOn")
     Employee toEntity(EmployeeRequestDto employeeRequestDto);
+
+
+    List<EmployeeResponseDto> toDtoList(List<Employee> employeeList);
+
 }
