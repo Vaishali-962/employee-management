@@ -2,9 +2,11 @@ package com.GenNext.employee_management.service;
 
 import com.GenNext.employee_management.dto.requestDto.EmployeeRequestDto;
 import com.GenNext.employee_management.dto.responseDto.EmployeeResponseDto;
+import com.GenNext.employee_management.exception.EmployeeException;
 import com.GenNext.employee_management.mapper.EmployeeMapper;
 import com.GenNext.employee_management.model.Employee;
 import com.GenNext.employee_management.repository.EmployeeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,39 +29,44 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     public List<EmployeeResponseDto> getAllEmployees(){
         List<Employee> employeeList = employeeRepository.findAll();
-        List<EmployeeResponseDto> empDtoList = employeeList.stream().map(employeeMapper::toDto).collect(Collectors.toList());
+        List<EmployeeResponseDto> empDtoList = employeeMapper.toDtoList(employeeList);
         return empDtoList;
     }
 
-    public EmployeeResponseDto getEmployeeById(Long id){
+    public EmployeeResponseDto getEmployeeById(Long empId){
 
-        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
         EmployeeResponseDto employeeResponseDto = optionalEmployee
                 .map(employeeMapper::toDto)
-                .orElseThrow(()->new RuntimeException("Employee not found for given id " + id));
+                .orElseThrow(()->new EmployeeException("EMPLOYEE_NOT_FOUND", "Employee not found for given id " + empId));
 
         return employeeResponseDto;
     }
 
     public EmployeeResponseDto updateEmployeeById(EmployeeRequestDto employeeRequestDto, Long id){
-        employeeMapper.toEntity(employeeRequestDto).setId(id);
-        Employee emp = employeeRepository.save(employeeMapper.toEntity(employeeRequestDto));
-        return employeeMapper.toDto(emp);
+        Employee existingEmployee = employeeRepository.findById(id).orElseThrow(() ->new EmployeeException("EMPLOYEE_NOT_FOUND", "Employee not found for id : " + id));
+        Employee updatingEmployee = employeeMapper.toEntity(employeeRequestDto);
+        updatingEmployee.setId(id);
+        Employee savedEmployee = employeeRepository.save(updatingEmployee);
+
+        return employeeMapper.toDto(savedEmployee);
     }
 
+    @Transactional
     public EmployeeResponseDto updateEmployeeSalary(Long empId, BigDecimal salary){
-        Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
-        if(optionalEmployee.isPresent()){
-            Employee emp = optionalEmployee.get();
-            emp.setSalary(salary);
-            Employee employee = employeeRepository.save(emp);
-            return employeeMapper.toDto(employee);
-        }else{
-            throw new RuntimeException("Employee Not Found for given id " + empId );
-        }
+        Employee existingEmployee = employeeRepository
+                .findById(empId)
+                .orElseThrow(()->new EmployeeException("EMPLOYEE_NOT_FOUND",
+                        "Employee not found for id: " + empId));
+
+        existingEmployee.setSalary(salary);
+        return employeeMapper.toDto(existingEmployee);
     }
 
     public void deleteEmployeeById(Long empId){
+        if(!employeeRepository.existsById(empId)){
+            throw new EmployeeException("EMPLOYEE_NOT_FOUND", "Employee not found for id: " + empId);
+        }
         employeeRepository.deleteById(empId);
     }
 
