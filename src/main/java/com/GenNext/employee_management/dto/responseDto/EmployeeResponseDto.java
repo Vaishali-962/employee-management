@@ -21,5 +21,5 @@ public class EmployeeResponseDto {
     private Department department;
     private BigDecimal salary;
     private String mobileNumber;
-    private LocalDate joinOn;
+    private String joinOn;
 }
